@@ -1,0 +1,6 @@
+#
+# This is a POSIX shell fragment
+#
+
+# Configuration file
+CONFFILE="/etc/redsocks.conf"

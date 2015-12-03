@@ -1,0 +1,32 @@
+Description: replace non-free images with external references
+ The images in doc where of unknown origin. We replace references to them with
+ links to equivalent wikimedia-commons images.
+Author: Apollon Oikonomopoulos <apoikos@gmail.com>
+Forwarded: no
+Last-Update: 2013-04-23
+
+===================================================================
+--- redsocks.orig/README	2012-05-24 15:50:03.000000000 +0300
++++ redsocks/README	2012-05-25 11:47:15.000000000 +0300
+@@ -150,7 +150,7 @@
+ luser$ sg socksified -c "firefox"
+ 
+ # If you want to configure socksifying router, you should look at
+-# doc/iptables-packet-flow.png and doc/iptables-packet-flow-ng.png
++# http://commons.wikimedia.org/wiki/File:Netfilter-packet-flow.svg
+ # Note, you should have proper `local_ip' value to get external packets with
+ # redsocks, default 127.0.0.1 will not go. See iptables(8) manpage regarding
+ # REDIRECT target for details.
+Index: redsocks/README.html
+===================================================================
+--- redsocks.orig/README.html	2012-05-24 15:50:03.000000000 +0300
++++ redsocks/README.html	2012-05-25 11:48:10.000000000 +0300
+@@ -152,7 +152,7 @@
+ <strong>luser$</strong> <code>sg socksified -c "firefox"</code>
+ 
+ # If you want to configure socksifying router, you should look at
+-# <a href="doc/iptables-packet-flow.png">doc/iptables-packet-flow.png</a> and <a href="doc/iptables-packet-flow-ng.png">doc/iptables-packet-flow-ng.png</a>
++# <a href="http://commons.wikimedia.org/wiki/File:Netfilter-packet-flow.svg">this netfilter packet flow diagram</a>.
+ # Note, you should have proper `local_ip' value to get external packets with
+ # redsocks, default 127.0.0.1 will not go. See iptables(8) manpage regarding
+ # <a href="http://dev.medozas.de/files/xtables/iptables.html#76">REDIRECT target</a> for details.

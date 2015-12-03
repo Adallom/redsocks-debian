@@ -1,0 +1,26 @@
+Source: redsocks
+Section: net
+Priority: extra
+Maintainer: Apollon Oikonomopoulos <apoikos@gmail.com>
+Build-Depends: debhelper (>= 9), libevent-dev, dh-systemd (>= 1.5)
+Standards-Version: 3.9.5
+Homepage: http://darkk.net.ru/redsocks/
+Vcs-Git: git://anonscm.debian.org/collab-maint/redsocks.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/redsocks.git;a=summary
+
+Package: redsocks
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
+Enhances: tor
+Description: arbitrary TCP connection redirector to a SOCKS or HTTPS proxy server
+ Redsocks is a daemon running on the local system, that will transparently
+ tunnel any TCP connection via a remote SOCKS4, SOCKS5 or HTTP proxy server. It
+ uses the system firewall's redirection facility to intercept TCP connections,
+ thus the redirection is system-wide, with fine-grained control, and does 
+ not depend on LD_PRELOAD libraries.
+ .
+ Redsocks supports tunneling TCP connections and UDP packets. It has
+ authentication support for both, SOCKS and HTTP proxies.
+ .
+ Also included is a small DNS server returning answers with the "truncated" flag
+ set for any UDP query, forcing the resolver to use TCP.

@@ -1,0 +1,12 @@
+redsocks (0.4+dfsg-2) unstable; urgency=low
+
+  As of 0.4+dsfg-2, redsocks will look for /etc/redsocks.conf by default. Prior
+  versions would look for $(pwd)/redsocks.conf. If you relied on this behavior,
+  make sure to pass the appropriate config file location using the -c flag.
+
+  Also beginning with 0.4+dfsg-2, redsocks is started by default upon
+  installation. The START option is no longer available in
+  /etc/default/redsocks, and system service management commands should be used
+  instead (e.g. update-rc.d, systemctl).
+
+ -- Apollon Oikonomopoulos <apoikos@gmail.com>  Mon, 04 Nov 2013 10:22:55 +0200

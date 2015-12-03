@@ -1,0 +1,29 @@
+redsocks (0.4+dfsg-2) unstable; urgency=low
+
+  * Bump standards version to 3.9.5
+    + no changes needed
+  * Add systemd support
+  * /etc/default/redsocks: start redsocks by default
+  * debian/copyright: migrate to Debian copyright format 1.0
+  * Change the default config file location to /etc/redsocks.conf (LP: #1047937)
+  * Add DEP3 headers to patches
+  * Manpage fixes
+
+ -- Apollon Oikonomopoulos <apoikos@gmail.com>  Fri, 01 Nov 2013 12:34:17 +0200
+
+redsocks (0.4+dfsg-1) unstable; urgency=low
+
+  * New upstream release. Fixes a busy-wait triggered on fd exhaustion.
+  * Fix debian/watch to properly detect upstream versions.
+  * Include upstream commmit 290f19 which fixes a DNS resolution bug.
+  * Bump debhelper compat to 9.
+  * Remove source doc/ subdirectory as it includes non-DFSG-free RFCs, and
+    files of unspecified origin and copyright.
+
+ -- Apollon Oikonomopoulos <apoikos@gmail.com>  Thu, 24 May 2012 16:00:05 +0300
+
+redsocks (0.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #649309)
+
+ -- Apollon Oikonomopoulos <apoikos@gmail.com>  Mon, 14 Nov 2011 14:42:55 +0200
