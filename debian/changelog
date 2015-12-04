@@ -1,3 +1,9 @@
+redsocks (0.4.1-adallom) unstable; urgency=low
+
+  * Add hostname sending support.
+
+ -- Aviram Cohen <aviram@adallom.com>  Thu, 03 Dec 2015 18:22:04 +0300
+
 redsocks (0.4+dfsg-2) unstable; urgency=low
 
   * Bump standards version to 3.9.5

@@ -1,20 +1,37 @@
-OBJS := parser.o main.o redsocks.o log.o http-connect.o socks4.o socks5.o http-relay.o base.o base64.o md5.o http-auth.o utils.o redudp.o dnstc.o gen/version.o
+PACKAGE := 0
+
+LIBHTTP_VERSION := 2.6.0
+LIBHTTP_NAME := http-parser-$(LIBHTTP_VERSION)
+LIBHTTP_CFLAGS := -I./http-parser-$(LIBHTTP_VERSION) -L./http-parser-$(LIBHTTP_VERSION)
+
+OBJS := tls.o parser.o main.o redsocks.o log.o http-connect.o socks4.o socks5.o http-relay.o base.o base64.o md5.o http-auth.o utils.o redudp.o dnstc.o gen/version.o
 SRCS := $(OBJS:.o=.c)
 CONF := config.h
 DEPS := .depend
 OUT := redsocks
-VERSION := 0.4
+VERSION := $(shell head -1 debian/changelog | grep -Po '\(\K(.*)(?=\))')
 
-LIBS := -levent
+LIBS := -levent -lhttp_parser
+CFLAGS += $(LIBHTTP_CFLAGS)
 CFLAGS += -g -O2
 override CFLAGS += -std=gnu99 -Wall
 
 all: $(OUT)
 
-.PHONY: all clean distclean
+.PHONY: all clean distclean http-parser
 
 tags: *.c *.h
 	ctags -R
+
+$(LIBHTTP_NAME):
+	wget https://github.com/nodejs/http-parser/archive/v$(LIBHTTP_VERSION).tar.gz
+	tar -zxf v$(LIBHTTP_VERSION).tar.gz
+	rm -f v$(LIBHTTP_VERSION).tar.gz
+
+$(LIBHTTP_NAME)/libhttp_parser.o:
+	cd $(LIBHTTP_NAME) && make package
+
+http-parser: $(LIBHTTP_NAME) $(LIBHTTP_NAME)/libhttp_parser.o
 
 $(CONF):
 	@case `uname` in \
@@ -30,13 +47,12 @@ $(CONF):
 		;; \
 	esac
 
-# Dependency on .git is useful to rebuild `version.c' after commit, but it breaks non-git builds.
 gen/version.c: *.c *.h gen/.build
 	rm -f $@.tmp
 	echo '/* this file is auto-generated during build */' > $@.tmp
 	echo '#include "../version.h"' >> $@.tmp
 	echo 'const char* redsocks_version = ' >> $@.tmp
-	if [ -d .git ]; then \
+	if [ $(PACKAGE) -eq 1 ]; then \
 		echo '"redsocks.git/'`git describe --tags`'"'; \
 		if [ `git status --porcelain | grep -v -c '^??'` != 0 ]; then \
 			echo '"-unclean"'; \
@@ -78,8 +94,25 @@ $(DEPS): $(SRCS)
 
 -include $(DEPS)
 
-$(OUT): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+$(OUT): http-parser $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LIBS)
+
+package: $(SRCS)
+	PACKAGE=1
+	dpkg-buildpackage -rfakeroot -uc -b
+	# dpkg-buildpackage builds the deb and changes files in .. and it's unchangeable
+	mv ../redsocks_$(VERSION)*.deb ./
+	mv ../redsocks_$(VERSION)*.changes ./
+
+clean-package:
+	$(RM) redsocks_$(VERSION)_*.deb
+	$(RM) redsocks_$(VERSION)_*.changes
+	$(RM) debian/files
+	$(RM) debian/redsocks.debhelper.log
+	$(RM) debian/redsocks.postinst.debhelper
+	$(RM) debian/redsocks.postrm.debhelper
+	$(RM) debian/redsocks.prerm.debhelper
+	$(RM) debian/redsocks.substvars
 
 clean:
 	$(RM) $(OUT) $(CONF) $(OBJS)
@@ -87,3 +120,4 @@ clean:
 distclean: clean
 	$(RM) tags $(DEPS)
 	$(RM) -r gen
+	$(RM) -rf $(LIBHTTP_NAME)

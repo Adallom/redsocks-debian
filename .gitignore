@@ -3,3 +3,16 @@ config.h
 tags
 redsocks
 .depend
+http-parser*
+gen/*
+version.c
+
+# dpkg-buildpackage outputs
+debian/files
+debian/redsocks.debhelper.log
+debian/redsocks.postinst.debhelper
+debian/redsocks.postrm.debhelper
+debian/redsocks.prerm.debhelper
+debian/redsocks.substvars
+redsocks_*.changes
+redsocks_*.deb
