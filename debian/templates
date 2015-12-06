@@ -1,0 +1,41 @@
+Template: redsocks/create_redsocks_conf
+Type: boolean
+Default: false
+Description: Do you want to configure redsocks now?
+
+Template: redsocks/redsocks_section
+Type: boolean
+Default: false
+Description: Do you want to add a redsocks tcp section?
+
+Template: redsocks/local_ip
+Type: string
+Default: 127.0.0.1
+Description: local IP on which redsocks listen
+
+Template: redsocks/local_port
+Type: string
+Default: 12345
+Description: local port on which redsocks listen
+
+Template: redsocks/proxy_type
+Type: select
+Choices: socks4, socks5, http-connect, http-relay
+Default: http-connect
+Description: The proxy type
+
+Template: redsocks/proxy_ip
+Type: string
+Default: 192.168.1.1
+Description: the IP of the proxy server
+
+Template: redsocks/proxy_port
+Type: string
+Default: 8080
+Description: the port of the proxy server
+
+Template: redsocks/parse_host
+Type: select
+Choices: None, sni, http_host
+Default: None
+Description: In which way should redsocks parse the hostname?

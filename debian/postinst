@@ -17,11 +17,74 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+. /usr/share/debconf/confmodule
 
 case "$1" in
     configure)
+
     adduser --system --disabled-password --disabled-login --home /var/run/redsocks \
         --no-create-home --quiet --group redsocks
+
+    db_input high 'redsocks/create_redsocks_conf' || true
+
+    db_go || true
+
+    db_get 'redsocks/create_redsocks_conf'
+
+    if [ $RET = true ]
+    then
+        cat > /etc/redsocks.conf <<EOF
+base {
+	log_debug = off;
+
+	log_info = on;
+
+	log = "syslog:daemon";
+
+	daemon = on;
+
+	user = redsocks;
+	group = redsocks;
+
+	redirector = iptables;
+}
+EOF
+    fi
+
+    while [ $RET = true ]
+    do
+        db_input high 'redsocks/local_ip' || true
+        db_input high 'redsocks/local_port' || true
+        db_input high 'redsocks/proxy_type' || true
+        db_input high 'redsocks/proxy_ip' || true
+        db_input high 'redsocks/proxy_port' || true
+        db_input high 'redsocks/parse_host' || true
+        
+        db_input high 'redsocks/redsocks_section' || true
+        db_go || true
+
+        db_get 'redsocks/local_ip'
+        local_ip="$RET"
+        db_get 'redsocks/local_port'
+        local_port="$RET"
+        db_get 'redsocks/proxy_type'
+        proxy_type="$RET"
+        db_get 'redsocks/proxy_ip'
+        proxy_ip="$RET"
+        db_get 'redsocks/proxy_port'
+        proxy_port="$RET"
+        db_get 'redsocks/parse_host'
+        parse_host="$RET"
+
+        /var/lib/redsocks/create_redsocks_section.sh <<EOF >> /etc/redsocks.conf
+$local_ip,$local_port,$proxy_ip,$proxy_port,$proxy_type,$parse_host
+EOF
+
+        db_get 'redsocks/redsocks_section'
+    done
+
+    exit 0
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

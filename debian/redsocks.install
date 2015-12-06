@@ -1,2 +1,3 @@
 redsocks /usr/sbin
 debian/redsocks.conf /etc
+debian/create_redsocks_section.sh /var/lib/redsocks
